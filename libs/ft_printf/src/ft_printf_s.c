@@ -12,6 +12,21 @@
 
 #include "../ft_printf.h"
 
+int ft_strlen_p(const char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (*str != '\0')
+	{
+		str++;
+		i++;
+	}
+	return (i);
+}
+
 int		ft_printf_s(va_list argument, t_flags *flag)
 {
 	int		out;
@@ -41,7 +56,7 @@ int		ft_printf_s(va_list argument, t_flags *flag)
 
 int		dot_setter(t_flags *flag, char *str)
 {
-	if (flag->dot > ft_strlen(str) || flag->dot == -1)
-		return (ft_strlen(str));
+	if (flag->dot > ft_strlen_p(str) || flag->dot == -1)
+		return (ft_strlen_p(str));
 	return (flag->dot);
 }

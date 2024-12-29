@@ -55,12 +55,3 @@ int		ft_printf_percent(t_flags *flag)
 	return (out);
 }
 
-int		ft_strlen(const char *s)
-{
-	int i;
-
-	i = 0;
-	while (*(s + i))
-		++i;
-	return (i);
-}

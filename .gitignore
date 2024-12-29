@@ -1,3 +1,5 @@
 .vscode
-*.o
+obj
+libs/obj/
 ft_ls
+.idea/

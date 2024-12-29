@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apiloian <apiloian@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amidoyan <amidoyan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/19 18:09:50 by apiloian          #+#    #+#             */
-/*   Updated: 2023/02/02 12:27:46 by apiloian         ###   ########.fr       */
+/*   Created: 2023/01/19 18:09:50 by amidoyan          #+#    #+#             */
+/*   Updated: 2023/02/02 12:27:46 by amidoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+#include <stdio.h>
 
 typedef struct s_list
 {

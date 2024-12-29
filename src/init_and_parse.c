@@ -12,29 +12,61 @@ void ft_init(t_ls *ls)
     ls->flags.R = 0;
     ls->flags.G = 0;
     ls->flags.g = 0;
-    ls->path = NULL;
+    ls->paths = NULL;
+}
+
+t_file **init_files(t_ls *ls)
+{
+    t_file **files;
+
+    files = malloc(sizeof(t_file *) * ls->pathCount);
+    // for (int i = 0; i < ls->pathCount; ++i)
+    return files;
+}
+
+int get_path_count(char **str)
+{
+    int i;
+    int count;
+
+    i = 0;
+    count = 0;
+    while(str[++i])
+    {
+        if (str[i][0] != '-')
+            ++count;
+    }
+    return (count);
 }
 
 void init_and_parse(int argc, char **argv, t_ls *ls)
 {
+    int argvIndex = 0;
+    int pathIndex = 0;
 
     ft_init(ls);
     if (argc == 1)
-        ls->path = ".";
-    else if (argc == 2)
     {
-        if (argv[1][0] == '-')
-        {
-            ls->path = ".";
-            parse_flags(ls, argv[1]);
-        }
-        else
-            ls->path = argv[1];
+        ls->paths = malloc(sizeof(char *) * 2);
+        ls->paths[0] = ".";
+        ls->paths[1] = NULL;
     }
     else
     {
-        parse_flags(ls, argv[1]);
-        ls->path = argv[2];
+        ls->pathCount = get_path_count(argv);
+        ls->paths = malloc(sizeof(char *) * (ls->pathCount + 1));
+        ls->paths[ls->pathCount] = NULL;
+        while (++argvIndex < argc)
+        {
+            if (argv[argvIndex][0] == '-')
+                parse_flags(ls, argv[argvIndex]);
+            else 
+            {
+                ls->paths[pathIndex] = malloc((sizeof(char) * ft_strlen(argv[argvIndex]) + 1));
+                ft_strlcpy(ls->paths[pathIndex], argv[argvIndex], ft_strlen(argv[argvIndex]) + 1);
+                ++pathIndex;
+            }
+        }
     }
 }
 
@@ -42,11 +74,7 @@ void parse_flags(t_ls *ls, char *str)
 {
     int i;
 
-    i = -1;
-    if (str[0] == '-')
-        ++i;
-    else
-        ft_error("Wrong Option\nUsage ./ft_ls [-alrtufdRgG] [PATH]\n");
+    i = 0;
     while (str[++i])
     {
         switch (str[i])
@@ -83,7 +111,6 @@ void parse_flags(t_ls *ls, char *str)
             break;
         default:
             ft_error("Wrong Option\nUsage ./ft_ls [-alrtufdRgG] [PATH]\n");
-            break;
         }
     }
 }
