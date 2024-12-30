@@ -38,6 +38,7 @@ typedef struct s_ls
     t_ls_flags flags;
     char **paths;
     int pathCount;
+    int pathIndex;
 } t_ls;
 
 /*Init and parse*/
@@ -47,8 +48,13 @@ void    parse_flags(t_ls *, char *);
 void    get_files(t_ls , t_file **);
 void    init_and_parse(int , char **, t_ls *);
 
+/*Sort lists*/
+void list_sort(t_file **, int (*compare)(t_file *, t_file *));
+
 /*Utils*/
 int ft_error(char *);
 void ft_free(t_file **, t_ls *);
+void print_list(t_file *);
 
+void execute_ls(t_ls, t_file **);
 #endif

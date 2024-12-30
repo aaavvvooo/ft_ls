@@ -15,15 +15,6 @@ void ft_init(t_ls *ls)
     ls->paths = NULL;
 }
 
-t_file **init_files(t_ls *ls)
-{
-    t_file **files;
-
-    files = malloc(sizeof(t_file *) * ls->pathCount);
-    // for (int i = 0; i < ls->pathCount; ++i)
-    return files;
-}
-
 int get_path_count(char **str)
 {
     int i;
@@ -43,6 +34,8 @@ void init_and_parse(int argc, char **argv, t_ls *ls)
 {
     int argvIndex = 0;
     int pathIndex = 0;
+    ls->pathIndex = 0;
+    int pathCount = get_path_count(argv);
 
     ft_init(ls);
     if (argc == 1)
@@ -50,11 +43,17 @@ void init_and_parse(int argc, char **argv, t_ls *ls)
         ls->paths = malloc(sizeof(char *) * 2);
         ls->paths[0] = ".";
         ls->paths[1] = NULL;
+        ls->pathCount = 1;
     }
     else
     {
-        ls->pathCount = get_path_count(argv);
+        if (pathCount == 0)
+            ls->pathCount = 1;
+        else
+            ls->pathCount = pathCount;
         ls->paths = malloc(sizeof(char *) * (ls->pathCount + 1));
+        if (pathCount == 0)
+            ls->paths[0] = ".";
         ls->paths[ls->pathCount] = NULL;
         while (++argvIndex < argc)
         {
@@ -75,6 +74,7 @@ void parse_flags(t_ls *ls, char *str)
     int i;
 
     i = 0;
+
     while (str[++i])
     {
         switch (str[i])

@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -ggdb -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-ggdb -fsanitize=address
 NAME = ft_ls
 RM = rm -rf
 
