@@ -1,7 +1,7 @@
 #include "../ft_ls.h"
-//TODO: reverse vmeste s -a
-//TODO 1) esli skrytaya direktoriya parsit .ku i sortirovat po sleduyushemu znacheniyu
-//TODO 2) . i .. vsegda pervie
+// TODO: -l
+// TODO: -R:((
+// TODO: printf with flags:))
 
 int compare_time_modified_nsec(t_file *a, t_file *b)
 {
@@ -24,7 +24,6 @@ int compare_time_modified(t_file *a, t_file *b)
     else if (a->status.st_mtime == b->status.st_mtime)
         return compare_time_modified_nsec(a, b);
     return 0;
-
 }
 
 int compare_access_time(t_file *a, t_file *b)
@@ -38,17 +37,56 @@ int compare_access_time(t_file *a, t_file *b)
 
 int alpha(t_file *a, t_file *b)
 {
-    if (ft_strncmp(ft_tolower_string(a->filename), ft_tolower_string(b->filename), ft_strlen(a->filename)) < 0)
+    char *a_str = ft_strdup(a->filename);
+    char *b_str = ft_strdup(b->filename);
+    if (ft_strncmp(ft_tolower_string(a_str), ft_tolower_string(b_str), ft_strlen(a_str)) < 0)
+    {
+        freer(a_str, b_str);
         return 1;
+    }
+    freer(a_str, b_str);
     return 0;
 }
 
 int reverse_alpha(t_file *a, t_file *b)
 {
-    if (ft_strncmp(ft_tolower_string(a->filename), ft_tolower_string(b->filename), ft_strlen(a->filename)) > 0)
+    char *a_str = ft_strdup(a->filename);
+    char *b_str = ft_strdup(b->filename);
+    if (ft_strncmp(ft_tolower_string(a_str), ft_tolower_string(b_str), ft_strlen(a_str)) > 0)
+    {
+        freer(a_str, b_str);
         return 1;
+    }
+    freer(a_str, b_str);
     return 0;
 }
+
+int alpha_for_a(t_file *a, t_file *b)
+{
+    char *a_str = ft_strdup(a->filename_without_dot);
+    char *b_str = ft_strdup(b->filename_without_dot);
+    if (ft_strncmp(ft_tolower_string(a_str), ft_tolower_string(b_str), ft_strlen(a_str)) < 0)
+    {
+        freer(a_str, b_str);
+        return 1;
+    }
+    freer(a_str, b_str);
+    return 0;
+}
+
+int reverse_alpha_for_a(t_file *a, t_file *b)
+{
+    char *a_str = ft_strdup(a->filename_without_dot);
+    char *b_str = ft_strdup(b->filename_without_dot);
+    if (ft_strncmp(ft_tolower_string(a_str), ft_tolower_string(b_str), ft_strlen(a_str)) > 0)
+    {
+        freer(a_str, b_str);
+        return 1;
+    }
+    freer(a_str, b_str);
+    return 0;
+}
+
 
 t_file *create_reversed_array(t_file *list, int length)
 {
@@ -57,8 +95,8 @@ t_file *create_reversed_array(t_file *list, int length)
     for (int i = length - 1; i >= 0; --i)
     {
         res[i].filename = list->filename;
+        res[i].filename_without_dot = list->filename_without_dot;
         res[i].status = list->status;
-        printf("hmm%d\n", i);
         if (list->next)
             list = list->next;
     }
@@ -81,12 +119,19 @@ void reverse_list(t_file **list)
         temp = temp->next;
     }
     t_file *temp_array = create_reversed_array(head, length);
-    for (int i = 0; i < length; ++i)
+    length = 0;
+    temp = head;
+    while (temp)
     {
-
+        temp->filename = temp_array[length].filename;
+        temp->filename_without_dot = temp_array[length].filename_without_dot;
+        temp->status = temp_array[length].status;
+        ++length;
+        temp = temp->next;
     }
     free(temp_array);
 }
+
 
 t_file *files_order_and_appearance(t_file *files, t_ls ls)
 {
@@ -98,12 +143,17 @@ t_file *files_order_and_appearance(t_file *files, t_ls ls)
         list_sort(&res, compare_time_modified);
     else
     {
-        if (ls.flags.r)
-            list_sort(&res, reverse_alpha);
-        list_sort(&res, alpha);
+        if (ls.flags.a && ls.flags.r) 
+            list_sort(&res, reverse_alpha_for_a);
+        else if (ls.flags.a && ls.flags.r)
+            list_sort(&res, alpha_for_a);
     }
-    if (ls.flags.r)
+    if (ls.flags.r && (ls.flags.u || ls.flags.t))
         reverse_list(&res);
+    else if (ls.flags.r)
+        list_sort(&res, reverse_alpha);
+    else
+        list_sort(&res, alpha);
     printf("=========After======\n");
     print_list(res);
     return res;

@@ -9,6 +9,10 @@ void append_to_files(t_ls *ls, t_file **files, char *filename, int index)
     {
         t_file *new = malloc(sizeof(t_file));
         new->filename = ft_strdup(filename);
+        if (filename[0] == '.' && ft_strncmp(filename, ".", 2) && ft_strncmp(filename, "..", 3))
+            new->filename_without_dot = mini_strdup(filename);
+        else
+            new->filename_without_dot = ft_strdup(filename);
         new->next = NULL;
         stat(filename, &new->status);
         files[ls->pathIndex] = new;
@@ -20,6 +24,10 @@ void append_to_files(t_ls *ls, t_file **files, char *filename, int index)
             temp = temp->next;
         temp->next = malloc(sizeof(t_file));
         temp->next->filename = ft_strdup(filename);
+        if (filename[0] == '.' && ft_strncmp(filename, ".", 2) && ft_strncmp(filename, "..", 3))
+            temp->next->filename_without_dot = mini_strdup(filename);
+        else
+            temp->next->filename_without_dot = ft_strdup(filename);
         temp->next->next = NULL;
         stat(filename, &temp->next->status);
     }

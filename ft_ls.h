@@ -28,6 +28,7 @@ typedef struct s_ls_flags
 
 typedef struct s_file{
     char            *filename;
+    char            *filename_without_dot;
     struct stat     status;
     struct s_file   *next;
 
@@ -52,9 +53,11 @@ void    init_and_parse(int , char **, t_ls *);
 void list_sort(t_file **, int (*compare)(t_file *, t_file *));
 
 /*Utils*/
-int ft_error(char *);
-void ft_free(t_file **, t_ls *);
-void print_list(t_file *);
+int     ft_error(char *);
+void    ft_free(t_file **, t_ls *);
+void    print_list(t_file *);
+char    *mini_strdup(char *);
+void freer(char *, char *);
 
 void execute_ls(t_ls, t_file **);
 #endif

@@ -69,5 +69,6 @@ char	*ft_strrchr(const char *s, int c);
 int		ft_tolower(int i);
 char	*ft_tolower_string(char *);
 int		ft_toupper(int i);
+char	*ft_strcpy(char *dest, char *src);
 
 #endif

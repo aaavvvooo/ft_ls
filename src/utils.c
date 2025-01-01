@@ -1,5 +1,23 @@
 #include "../ft_ls.h"
 
+char *mini_strdup(char *str)
+{
+    char * ret;
+
+    if (!str)
+        return NULL;
+
+    if (*str == '.' && *(str + 1) != '.')
+        ++str;
+    ret = ft_strdup(str);
+    return ret;
+}
+void freer(char *a, char *b)
+{
+    free(a);
+    free(b);
+}
+
 int ft_error(char *msg)
 {
     printf("%s\n", msg);
