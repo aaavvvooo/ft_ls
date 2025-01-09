@@ -1,6 +1,6 @@
 #include "../ft_ls.h"
 // TODO: -l
-// TODO: -R:((
+// TODO: -R nearly done
 // TODO: printf with flags:))
 
 int compare_time_modified_nsec(t_file *a, t_file *b)
@@ -87,7 +87,6 @@ int reverse_alpha_for_a(t_file *a, t_file *b)
     return 0;
 }
 
-
 t_file *create_reversed_array(t_file *list, int length)
 {
     t_file *res = malloc(length * sizeof(t_file));
@@ -101,7 +100,6 @@ t_file *create_reversed_array(t_file *list, int length)
             list = list->next;
     }
     return res;
-
 }
 
 void reverse_list(t_file **list)
@@ -132,42 +130,50 @@ void reverse_list(t_file **list)
     free(temp_array);
 }
 
-
-t_file *files_order_and_appearance(t_file *files, t_ls ls)
+void print_files(t_file *list, t_ls ls)
 {
-    t_file *res = files;
+    t_file *temp = list;
+    if (ls.pathCount > 1 || ls.flags.R)
+        printf("%s:\n", ls.paths[ls.pathIndex]);
+    while (temp)
+    {
+        if(temp->next)
+            printf("%s   ", temp->filename);
+        else
+            printf("%s\n", temp->filename);
+        temp = temp->next;
+    }
+    printf("\n");
+}
 
-    if (ls.flags.u)
+void    files_order_and_appearance(t_file **files, t_ls ls)
+{
+    t_file *res = *files;
+
+    if (ls.flags.u && !ls.flags.r)
+    {
         list_sort(&res, compare_access_time);
-    else if (!ls.flags.u && ls.flags.t)
+        *files = res;
+        return ;
+    }
+    else if (!ls.flags.u && ls.flags.t && !ls.flags.r)
+    {
         list_sort(&res, compare_time_modified);
+        *files = res;
+        return ;
+    }
     else
     {
         if (ls.flags.a && ls.flags.r) 
             list_sort(&res, reverse_alpha_for_a);
-        else if (ls.flags.a && ls.flags.r)
+        else if (ls.flags.a && !ls.flags.r)
             list_sort(&res, alpha_for_a);
     }
     if (ls.flags.r && (ls.flags.u || ls.flags.t))
         reverse_list(&res);
-    else if (ls.flags.r)
+    else if (ls.flags.r & !ls.flags.a)
         list_sort(&res, reverse_alpha);
-    else
+    else if (!ls.flags.a)
         list_sort(&res, alpha);
-    printf("=========After======\n");
-    print_list(res);
-    return res;
-}
-
-void execute_ls(t_ls ls, t_file **files)
-{
-
-    for (int i = 0; i < ls.pathCount; ++i)
-    {
-        files[i] = files_order_and_appearance(files[i], ls);
-        // print_files();
-        if (ls.flags.R)
-            continue;
-                // recursion()
-    }
+    *files = res;
 }

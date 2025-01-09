@@ -35,7 +35,7 @@ void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 int		ft_strlen(const char *str);
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
+size_t	ft_strlcat(char **dst, const char *src, size_t dstsize);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);

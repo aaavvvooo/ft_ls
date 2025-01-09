@@ -36,8 +36,13 @@ void ft_free(t_file **files, t_ls *ls)
 }
 
 void print_list(t_file *head) {
+    if (!head)
+    {
+        printf("The list is empty\n");
+        return ;
+    }
     while (head) {
-        printf("%s\n", head->filename);
+        printf("filename ==== %s\n", head->filename);
         head = head->next;
     }
 }
