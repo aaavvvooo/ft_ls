@@ -9,6 +9,8 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <stdlib.h>
+#include <pwd.h>
+#include <grp.h>
 #include "libs/libft/libft.h"
 #include "libs/ft_printf/ft_printf.h"
 

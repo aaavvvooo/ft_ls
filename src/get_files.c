@@ -4,7 +4,8 @@ void append_to_files(t_ls *ls, t_file **files, char *filename, int index)
 {   
     int     i = 0;
     t_file  *temp = files[ls->pathIndex];
-    char    *temp_str;
+    char    *temp_str1;
+    char    *temp_str2;
 
     if (index == 0)
     {
@@ -15,10 +16,12 @@ void append_to_files(t_ls *ls, t_file **files, char *filename, int index)
         else
             new->filename_without_dot = ft_strdup(filename);
         new->next = NULL;
-        temp_str = ft_strjoin(ls->paths[0], "/");
-        temp_str = ft_strjoin(temp_str, filename);
-        stat(temp_str, &new->status);
+        temp_str1 = ft_strjoin(ls->paths[ls->pathIndex], "/");
+        temp_str2 = ft_strjoin(temp_str1, filename);
+        lstat(temp_str2, &new->status);
         files[ls->pathIndex] = new;
+        free(temp_str1);
+        free(temp_str2);
     }
     else
     {
@@ -32,9 +35,11 @@ void append_to_files(t_ls *ls, t_file **files, char *filename, int index)
         else
             temp->next->filename_without_dot = ft_strdup(filename);
         temp->next->next = NULL;
-        temp_str = ft_strjoin(ls->paths[0], "/");
-        temp_str = ft_strjoin(temp_str, filename);
-        stat(temp_str, &temp->next->status);
+        temp_str1 = ft_strjoin(ls->paths[ls->pathIndex], "/");
+        temp_str2 = ft_strjoin(temp_str1, filename);
+        lstat(temp_str2, &temp->next->status);
+        free(temp_str1);
+        free(temp_str2);
     }
 }
 
@@ -72,10 +77,11 @@ void get_files(t_ls ls, t_file **files){
             files_order_and_appearance(&files[i], ls);
             print_files(files[i], ls);
             t_file *temp = files[i];
-            for( int i = 0; i < index; ++i)
+            for(int i = 0; i < index; ++i)
             {
                 if (ls.flags.R && S_ISDIR(temp->status.st_mode) && ft_strncmp(".", temp->filename, 2) && ft_strncmp("..", temp->filename, 3))
                 {
+                    char *temp_join = ft_strjoin(ls.paths[ls.pathIndex], "/");
                     t_file **rec_files = malloc(sizeof(t_file *) * 1);
                     *rec_files = NULL;
                     t_ls rec_ls;
@@ -83,10 +89,13 @@ void get_files(t_ls ls, t_file **files){
                     rec_ls.pathCount = 1;
                     rec_ls.pathIndex = 0;
                     rec_ls.paths = malloc(sizeof(char *) * 2);
-                    rec_ls.paths[0] = ft_strjoin(ls.paths[0], "/");
-                    rec_ls.paths[0] = ft_strjoin(rec_ls.paths[0], temp->filename);
+                    rec_ls.paths[0] = temp_join;
+                    rec_ls.paths[0] = ft_strjoin(temp_join, temp->filename);
                     rec_ls.paths[1] = NULL;
                     get_files(rec_ls, rec_files);
+                    free(temp_join);
+                    free(rec_ls.paths[0]);
+                    ft_free(rec_files, &rec_ls);
                 }
                 temp = temp->next;
             }

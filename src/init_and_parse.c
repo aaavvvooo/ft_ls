@@ -79,38 +79,26 @@ void parse_flags(t_ls *ls, char *str)
     {
         switch (str[i])
         {
-        case 'a':
-            ls->flags.a = 1;
-            break;
-        case 'l':
-            ls->flags.l = 1;
-            break;
-        case 'r':
-            ls->flags.r = 1;
-            break;
-        case 't':
-            ls->flags.t = 1;
-            break;
-        case 'u':
-            ls->flags.u = 1;
-            break;
-        case 'f':
-            ls->flags.f = 1;
-            break;
-        case 'd':
-            ls->flags.d = 1;
-            break;
-        case 'R':
-            ls->flags.R = 1;
-            break;
-        case 'g':
-            ls->flags.g = 1;
-            break;
-        case 'G':
-            ls->flags.G = 1;
-            break;
-        default:
-            ft_error("Wrong Option\nUsage ./ft_ls [-alrtufdRgG] [PATH]\n");
+            case 'a':
+                ls->flags.a = 1;
+                break;
+            case 'l':
+                ls->flags.l = 1;
+                break;
+            case 'r':
+                ls->flags.r = 1;
+                break;
+            case 't':
+                ls->flags.t = 1;
+                break;
+            case 'u':
+                ls->flags.u = 1;
+                break;
+            case 'R':
+                ls->flags.R = 1;
+                break;
+            default:
+                ft_error("Wrong Option\nUsage ./ft_ls [-alrtufdRgG] [PATH]\n");
         }
     }
 }
