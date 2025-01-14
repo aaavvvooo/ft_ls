@@ -44,7 +44,7 @@ void			ft_flag_star(va_list argument, t_flags *flag);
 void			init(t_flags *flag);
 int				ft_putchar(char c);
 int				ft_putstr(char *str);
-char			*ft_itoa(int n);
+char			*ft_itoaa(int n);
 int				int_len(int n);
 int				int_len_u(unsigned int n);
 int				int_len_x(unsigned int n);

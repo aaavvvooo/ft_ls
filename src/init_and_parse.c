@@ -41,8 +41,9 @@ void init_and_parse(int argc, char **argv, t_ls *ls)
     if (argc == 1)
     {
         ls->paths = malloc(sizeof(char *) * 2);
-        ls->paths[0] = ".";
-        ls->paths[1] = NULL;
+        ls->paths[0] = malloc(2);
+        ls->paths[0][0] = '.';
+        ls->paths[0][1] = '\0';
         ls->pathCount = 1;
     }
     else
@@ -53,7 +54,11 @@ void init_and_parse(int argc, char **argv, t_ls *ls)
             ls->pathCount = pathCount;
         ls->paths = malloc(sizeof(char *) * (ls->pathCount + 1));
         if (pathCount == 0)
-            ls->paths[0] = ".";
+        {
+            ls->paths[0] = malloc(2);
+            ls->paths[0][0] = '.';
+            ls->paths[0][1] = '\0';
+        }
         ls->paths[ls->pathCount] = NULL;
         while (++argvIndex < argc)
         {

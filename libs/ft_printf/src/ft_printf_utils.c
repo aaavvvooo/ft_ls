@@ -52,7 +52,7 @@ int		int_len(int n)
 	return (len);
 }
 
-char	*ft_itoa(int n)
+char	*ft_itoaa(int n)
 {
 	char	*res;
 	int		len;

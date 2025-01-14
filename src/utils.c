@@ -20,7 +20,7 @@ void freer(char *a, char *b)
 
 int ft_error(char *msg)
 {
-    printf("%s\n", msg);
+    ft_printf("%s\n", msg);
     exit (1);
 }
 
@@ -45,18 +45,20 @@ void ft_free(t_file **files, t_ls *ls)
         for (int i = 0; i < ls->pathCount; ++i)
             free(ls->paths[i]);
     }
+    else if (ls->pathCount == 1 && !ft_strncmp(".", ls->paths[0], 2))
+        free(ls->paths[0]);
     free(ls->paths);
 }
 
 void print_list(t_file *head) {
     if (!head)
     {
-        printf("The list is empty\n");
+        ft_printf("The list is empty\n");
         return ;
     }
     while (head)
     {
-        printf("filename ==== %s\n", head->filename);
+        ft_printf("filename ==== %s\n", head->filename);
         head = head->next;
     }
 }

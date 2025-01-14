@@ -54,7 +54,7 @@ void get_files(t_ls ls, t_file **files){
         dir = opendir(ls.paths[i]);
         if (dir == NULL)
         {
-            printf("ft_ls: cannot access '%s': No such file or directory\n", ls.paths[i]);
+            ft_printf("ft_ls: cannot access '%s': No such file or directory\n", ls.paths[i]);
             continue;
         }
         else

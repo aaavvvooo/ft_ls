@@ -16,6 +16,7 @@ int ft_printf_d(va_list argument, t_flags *flag)
 {
 	int a[4];
 	char zero;
+	char *itoa_str;
 
 	a[0] = 0;
 	zero = ' ';
@@ -35,7 +36,11 @@ int ft_printf_d(va_list argument, t_flags *flag)
 	while (a[3]--)
 		a[0] += ft_putchar('0');
 	if (flag->dot != 0 || a[2] != 0)
-		a[0] += ft_putstr(ft_itoa(a[2]));
+	{
+		itoa_str = ft_itoa(a[2]);
+		a[0] += ft_putstr(itoa_str);
+		free(itoa_str);
+	}
 	if (flag->minus && a[1] > 0 && flag->digit)
 		a[0] += space_printer(a[1]);
 	return (a[0]);

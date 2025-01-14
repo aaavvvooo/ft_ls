@@ -1,7 +1,4 @@
 #include "../ft_ls.h"
-// TODO: LEAKS
-//strjoin that frees the first param
-
 
 int compare_time_modified_nsec(t_file *a, t_file *b)
 {
@@ -185,15 +182,15 @@ int get_file_type(t_file *list)
 
 void permission_printer(t_file *file)
 {
-    printf((file->status.st_mode & S_IRUSR) ? "r" : "-");
-    printf((file->status.st_mode & S_IWUSR) ? "w" : "-");
-    printf((file->status.st_mode & S_IXUSR) ? "x" : "-");
-    printf((file->status.st_mode & S_IRGRP) ? "r" : "-");
-    printf((file->status.st_mode & S_IWGRP) ? "w" : "-");
-    printf((file->status.st_mode & S_IXGRP) ? "x" : "-");
-    printf((file->status.st_mode & S_IROTH) ? "r" : "-");
-    printf((file->status.st_mode & S_IWOTH) ? "w" : "-");
-    printf((file->status.st_mode & S_IXOTH) ? "x" : "-");
+    ft_printf((file->status.st_mode & S_IRUSR) ? "r" : "-");
+    ft_printf((file->status.st_mode & S_IWUSR) ? "w" : "-");
+    ft_printf((file->status.st_mode & S_IXUSR) ? "x" : "-");
+    ft_printf((file->status.st_mode & S_IRGRP) ? "r" : "-");
+    ft_printf((file->status.st_mode & S_IWGRP) ? "w" : "-");
+    ft_printf((file->status.st_mode & S_IXGRP) ? "x" : "-");
+    ft_printf((file->status.st_mode & S_IROTH) ? "r" : "-");
+    ft_printf((file->status.st_mode & S_IWOTH) ? "w" : "-");
+    ft_printf((file->status.st_mode & S_IXOTH) ? "x" : "-");
 }
 
 void print_permissions(t_file *list)
@@ -203,7 +200,7 @@ void print_permissions(t_file *list)
     int fileType = get_file_type(list);
     if (fileType == -1)
         ft_error("Unknown file type detected\n");
-    printf("%c", fileTypes[fileType]);
+    ft_printf("%c", fileTypes[fileType]);
     permission_printer(list);
 }
 
@@ -267,8 +264,8 @@ void print_links(t_file *list, int maxLength)
     char    *itoa_str = ft_itoa(temp->status.st_nlink);
     tempLength = ft_strlen(itoa_str);
     for (int i = 0; i < maxLength - tempLength; ++i)
-        printf(" ");
-    printf("%d ", (int)temp->status.st_nlink);
+        ft_printf(" ");
+    ft_printf("%d ", (int)temp->status.st_nlink);
     free(itoa_str);
 }
 
@@ -280,9 +277,9 @@ void print_author(t_file *list, int maxLength)
 
     user = getpwuid(temp->status.st_uid);
     tempLength = ft_strlen(user->pw_name);
-    printf("%s", user->pw_name);
+    ft_printf("%s", user->pw_name);
     for (int i = 0; i < maxLength - tempLength; ++i)
-        printf(" ");
+        ft_printf(" ");
 }
 
 void print_group(t_file *list, int maxLength)
@@ -293,9 +290,9 @@ void print_group(t_file *list, int maxLength)
 
     group = getpwuid(temp->status.st_uid);
     tempLength = ft_strlen(group->pw_name);
-    printf("%s", group->pw_name);
+    ft_printf("%s", group->pw_name);
     for (int i = 0; i < maxLength - tempLength; ++i)
-        printf(" ");
+        ft_printf(" ");
 }
 
 void print_size(t_file *list, int maxLength)
@@ -306,12 +303,13 @@ void print_size(t_file *list, int maxLength)
     char *itoa_str = ft_itoa((int)temp->status.st_size);
     tempLength = ft_strlen(itoa_str);
     for (int i = 0; i < maxLength - tempLength; ++i)
-        printf(" ");
-    printf("%d ", (int)temp->status.st_size);
+        ft_printf(" ");
+    ft_printf("%d ", (int)temp->status.st_size);
     free(itoa_str);
 }
 
-int get_year_from_time_t(time_t timestamp) {
+int get_year_from_time_t(time_t timestamp)
+{
     const int SECONDS_IN_A_DAY = 86400;
     const int EPOCH_YEAR = 1970;
     int year = EPOCH_YEAR;
@@ -341,11 +339,11 @@ void print_date(t_file *list)
     char *sub_str1 = ft_substr(time_str, 4, 6);
     char *sub_str2 = ft_substr(time_str, 10, 6);
 
-    printf("%s", sub_str1);
+    ft_printf("%s", sub_str1);
     if (timediff > seconds_in_year)
-        printf("  %d", file_year);
+        ft_printf("  %d", file_year);
     else
-        printf("%s", sub_str2);
+        ft_printf("%s", sub_str2);
     free(sub_str1);
     free(sub_str2);
 }
@@ -355,9 +353,9 @@ void print_link_filename(t_file *list)
     char buf[1024];
 
     readlink(list->filename, buf, sizeof(buf) - 1);
-    printf (" %s -> ", list->filename);
+    ft_printf (" %s -> ", list->filename);
     buf[1023] = '\0';
-    printf("%s\n", buf);
+    ft_printf("%s\n", buf);
 }
 
 void print_files(t_file *list, t_ls ls)
@@ -369,10 +367,10 @@ void print_files(t_file *list, t_ls ls)
     int maxLengthSize;
 
     if (ls.pathCount > 1 || ls.flags.R)
-        printf("%s:\n", ls.paths[ls.pathIndex]);
+        ft_printf("%s:\n", ls.paths[ls.pathIndex]);
     if (ls.flags.l)
     {
-        printf("total %d\n", get_total_count(list));
+        ft_printf("total %d\n", get_total_count(list));
         maxLengthLinks = getMaxLength(list, "link") + 1;
         maxLengthAuthor = getMaxLength(list, "author") + 1;
         maxLengthGroup = getMaxLength(list, "group") + 1;
@@ -388,7 +386,7 @@ void print_files(t_file *list, t_ls ls)
             if (ls.flags.l && S_ISLNK(temp->status.st_mode))
                 print_link_filename(temp);
             else
-                printf(" %s\n", temp->filename);  
+                ft_printf(" %s\n", temp->filename);  
             temp = temp->next;
         }
     }
@@ -397,11 +395,12 @@ void print_files(t_file *list, t_ls ls)
         while (temp)
         {
             if(temp->next)
-                printf("%s   ", temp->filename);
+                ft_printf("%s   ", temp->filename);
             else
-                printf("%s\n", temp->filename);
+                ft_printf("%s\n", temp->filename);
             temp = temp->next;
         }
-        printf("\n");
     }
+    if (ls.flags.R || ls.pathCount > 1)
+        ft_printf("\n");
 }
